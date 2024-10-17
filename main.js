@@ -1,9 +1,9 @@
 let score = 0;  // Current game score
 let highScore = localStorage.getItem('highScore') || 0;  // Retrieve high score from localStorage (or set to 0 if none exists)
 
-// Function to update the score and check the high score
-function updateScore(points) {
-    score += points;  // Add points from merged tiles to the current score
+// Function to update the score based on the value of the new merged tile
+function updateScore(newTileValue) {
+    score += newTileValue;  // Add the value of the merged tile to the current score
     document.getElementById('current-score').textContent = score;  // Update score display on the screen
 
     // If the current score is higher than the high score, update the high score
@@ -63,13 +63,13 @@ function moveLeft() {
         for (let col = 0; col < newRow.length - 1; col++) {
             if (newRow[col] === newRow[col + 1]) {
                 newRow[col] *= 2;  // Merge tiles
-                updateScore(newRow[col]);  // Update score for merged tiles
-                newRow[col + 1] = 0;
+                updateScore(newRow[col]);  // Add the merged tile value to the score
+                newRow[col + 1] = 0;  // Set the merged tile's original position to zero
             }
         }
-        newRow = newRow.filter(val => val);  // Remove zeroes again
+        newRow = newRow.filter(val => val);  // Remove zeroes again after merging
         while (newRow.length < 4) newRow.push(0);  // Add zeroes to the right
-        board[row] = newRow;
+        board[row] = newRow;  // Update the row in the game board
     }
 }
 
@@ -79,13 +79,13 @@ function moveRight() {
         for (let col = newRow.length - 1; col > 0; col--) {
             if (newRow[col] === newRow[col - 1]) {
                 newRow[col] *= 2;
-                updateScore(newRow[col]);  // Update score for merged tiles
-                newRow[col - 1] = 0;
+                updateScore(newRow[col]);  // Add the merged tile value to the score
+                newRow[col - 1] = 0;  // Set the merged tile's original position to zero
             }
         }
         newRow = newRow.filter(val => val);  // Remove zeroes again
         while (newRow.length < 4) newRow.unshift(0);  // Add zeroes to the left
-        board[row] = newRow;
+        board[row] = newRow;  // Update the row in the game board
     }
 }
 
@@ -97,15 +97,15 @@ function moveUp() {
         }
         for (let row = 0; row < newCol.length - 1; row++) {
             if (newCol[row] === newCol[row + 1]) {
-                newCol[row] *= 2;
-                updateScore(newCol[row]);  // Update score for merged tiles
+                newCol[row] *= 2;  // Merge tiles
+                updateScore(newCol[row]);  // Add the merged tile value to the score
                 newCol[row + 1] = 0;
             }
         }
-        newCol = newCol.filter(val => val);
-        while (newCol.length < 4) newCol.push(0);
+        newCol = newCol.filter(val => val);  // Remove zeroes again
+        while (newCol.length < 4) newCol.push(0);  // Add zeroes to the bottom
         for (let row = 0; row < 4; row++) {
-            board[row][col] = newCol[row];
+            board[row][col] = newCol[row];  // Update the column in the game board
         }
     }
 }
@@ -118,15 +118,15 @@ function moveDown() {
         }
         for (let row = newCol.length - 1; row > 0; row--) {
             if (newCol[row] === newCol[row - 1]) {
-                newCol[row] *= 2;
-                updateScore(newCol[row]);  // Update score for merged tiles
+                newCol[row] *= 2;  // Merge tiles
+                updateScore(newCol[row]);  // Add the merged tile value to the score
                 newCol[row - 1] = 0;
             }
         }
         newCol = newCol.filter(val => val);  // Remove zeroes again
         while (newCol.length < 4) newCol.unshift(0);  // Add zeroes to the top
         for (let row = 0; row < 4; row++) {
-            board[row][col] = newCol[row];
+            board[row][col] = newCol[row];  // Update the column in the game board
         }
     }
 }
