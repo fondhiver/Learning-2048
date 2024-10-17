@@ -1,4 +1,4 @@
-const board = [
+const board = [ 
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -94,4 +94,41 @@ function moveDown() {
             if (board[row][col] !== 0) newCol.push(board[row][col]);
         }
         for (let row = newCol.length - 1; row > 0; row--) {
-            if (newCol[row] === newCol[row - 1
+            if (newCol[row] === newCol[row - 1]) {
+                newCol[row] *= 2;
+                newCol[row - 1] = 0;
+            }
+        }
+        newCol = newCol.filter(val => val);  // Remove zeroes again
+        while (newCol.length < 4) newCol.unshift(0);  // Add zeroes to the top
+        for (let row = 0; row < 4; row++) {
+            board[row][col] = newCol[row];
+        }
+    }
+}
+
+// Listen for key presses and move tiles accordingly
+document.addEventListener('keydown', (event) => {
+    switch (event.key) {
+        case 'ArrowUp':
+            moveUp();
+            break;
+        case 'ArrowDown':
+            moveDown();
+            break;
+        case 'ArrowLeft':
+            moveLeft();
+            break;
+        case 'ArrowRight':
+            moveRight();
+            break;
+    }
+    addNewTile();  // Add a new tile after each move
+    renderBoard(); // Re-render the board after each move
+});
+
+// Initialize the game with two tiles and render the initial board
+addNewTile();
+addNewTile();
+renderBoard();
+
