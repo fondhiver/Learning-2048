@@ -1,10 +1,28 @@
-const board = [ 
+let score = 0;  // Current game score
+let highScore = localStorage.getItem('highScore') || 0;  // Retrieve high score from localStorage (or set to 0 if none exists)
+
+// Function to update the score and check the high score
+function updateScore(points) {
+    score += points;  // Add points from merged tiles to the current score
+    document.getElementById('current-score').textContent = score;  // Update score display on the screen
+
+    // If the current score is higher than the high score, update the high score
+    if (score > highScore) {
+        highScore = score;
+        document.getElementById('high-score').textContent = highScore;
+        localStorage.setItem('highScore', highScore);  // Save the new high score to localStorage
+    }
+}
+
+// Game board setup
+const board = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0]
 ];
 
+// Function to add a new tile (2 or 4) in a random empty cell
 function addNewTile() {
     let emptyTiles = [];
     for (let row = 0; row < 4; row++) {
@@ -16,10 +34,11 @@ function addNewTile() {
     }
     if (emptyTiles.length > 0) {
         let randomTile = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
-        board[randomTile.row][randomTile.col] = Math.random() < 0.9 ? 2 : 4;
+        board[randomTile.row][randomTile.col] = Math.random() < 0.9 ? 2 : 4;  // 90% chance for 2, 10% chance for 4
     }
 }
 
+// Function to render the game board
 function renderBoard() {
     const grid = document.querySelector('.grid');
     grid.innerHTML = '';  // Clear grid before re-rendering
@@ -37,12 +56,14 @@ function renderBoard() {
     }
 }
 
+// Movement Functions
 function moveLeft() {
     for (let row = 0; row < 4; row++) {
-        let newRow = board[row].filter(val => val); // Remove zeroes
+        let newRow = board[row].filter(val => val);  // Remove zeroes
         for (let col = 0; col < newRow.length - 1; col++) {
             if (newRow[col] === newRow[col + 1]) {
                 newRow[col] *= 2;  // Merge tiles
+                updateScore(newRow[col]);  // Update score for merged tiles
                 newRow[col + 1] = 0;
             }
         }
@@ -54,10 +75,11 @@ function moveLeft() {
 
 function moveRight() {
     for (let row = 0; row < 4; row++) {
-        let newRow = board[row].filter(val => val); // Remove zeroes
+        let newRow = board[row].filter(val => val);  // Remove zeroes
         for (let col = newRow.length - 1; col > 0; col--) {
             if (newRow[col] === newRow[col - 1]) {
                 newRow[col] *= 2;
+                updateScore(newRow[col]);  // Update score for merged tiles
                 newRow[col - 1] = 0;
             }
         }
@@ -76,6 +98,7 @@ function moveUp() {
         for (let row = 0; row < newCol.length - 1; row++) {
             if (newCol[row] === newCol[row + 1]) {
                 newCol[row] *= 2;
+                updateScore(newCol[row]);  // Update score for merged tiles
                 newCol[row + 1] = 0;
             }
         }
@@ -96,6 +119,7 @@ function moveDown() {
         for (let row = newCol.length - 1; row > 0; row--) {
             if (newCol[row] === newCol[row - 1]) {
                 newCol[row] *= 2;
+                updateScore(newCol[row]);  // Update score for merged tiles
                 newCol[row - 1] = 0;
             }
         }
@@ -132,3 +156,6 @@ addNewTile();
 addNewTile();
 renderBoard();
 
+// Initialize the score display when the game loads
+document.getElementById('high-score').textContent = highScore;
+document.getElementById('current-score').textContent = score;
