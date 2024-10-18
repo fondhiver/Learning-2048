@@ -15,7 +15,7 @@ h1 {
     display: flex;              /* Aligns the scores side by side */
     justify-content: center;     /* Centers the score container */
     gap: 20px;                   /* Adds space between the score and high score */
-    margin-bottom: 20px;         /* Adds space between the score container and the game grid */
+    margin-bottom: 40px;         /* Adds space between the score container and the game grid */
     font-family: Arial, sans-serif;  /* Sets the font to Arial */
     font-size: 12px;             /* Sets the font size to 12px */
 }
