@@ -146,6 +146,8 @@ document.addEventListener('keydown', (event) => {
         case 'ArrowRight':
             moveRight();
             break;
+        default:
+            return;  // If any other key is pressed, do nothing
     }
     addNewTile();  // Add a new tile after each move
     renderBoard(); // Re-render the board after each move
